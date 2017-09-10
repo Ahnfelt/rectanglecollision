@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Collision attempt 99999999999999</title>
+    </head>
+    <body style="margin: 0; padding: 0">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <script>
+            var canvas = document.getElementById("canvas");
+            var rectangles = [
+                {position: {x: 0, y: canvas.height * 0.5}, velocity: {x: 0, y: 0}, size: {x: 5, y: canvas.height * 10}, gravity: {x: 0, y: 0}},
+                {position: {x: canvas.width, y: canvas.height * 0.5}, velocity: {x: 0, y: 0}, size: {x: 5, y: canvas.height * 10}, gravity: {x: 0, y: 0}},
+                {position: {x: canvas.width / 2, y: canvas.height}, velocity: {x: 0, y: 0}, size: {x: canvas.width * 10, y: 5}, gravity: {x: 0, y: 0}}
+            ];
+            function click(e) {
+                var x = e.pageX;
+                var y = e.pageY;
+                var gravity = {x: 0, y: 9.8 * 50};
+                var size = {x: 30 + 30 * Math.random(), y: 20 + 20 * Math.random()};
+                var velocity = {x: Math.random() * 1000 - 500, y : Math.random() * 1000 - 500};
+                rectangles.push({position: {x: x, y: y}, velocity: velocity, size: size, gravity: gravity});
+            }
+            canvas.onclick = click;
+            function draw() {
+                var g = canvas.getContext("2d");
+                g.clearRect(0, 0, canvas.width, canvas.height);
+                for(var i = 0; i < rectangles.length; i++) {
+                    var r = rectangles[i];
+                    g.beginPath();
+                    g.rect(r.position.x - r.size.x * 0.5, r.position.y - r.size.y * 0.5, r.size.x, r.size.y);
+                    g.fillStyle = "#FFF0F0";
+                    g.fill();
+                    g.strokeStyle = "#FF0000";
+                    g.stroke();
+                    g.closePath();
+                }
+            }
+            function move(index, dx, dy, delta) {
+                var r1 = rectangles[index];
+                if(Math.abs(dx) > 100 || Math.abs(dy) > 100) {
+                    move(index, dx * 0.5, dy * 0.5, delta);
+                    move(index, dx * 0.5, dy * 0.5, delta);
+                    return;
+                }
+                
+                if(r1.velocity.x < -1) {
+                    var x1 = r1.position.x - r1.size.x * 0.5 + dx;
+                    var a1 = r1.position.y - r1.size.y * 0.5;
+                    var a2 = r1.position.y + r1.size.y * 0.5;
+                    for(var i = 0; i < rectangles.length; i++) if(i != index) {
+                        var r2 = rectangles[i];
+                        var x2 = r2.position.x + r2.size.x * 0.5;
+                        if(r1.position.x > x2) {
+                            var b1 = r2.position.y - r2.size.y * 0.5;
+                            var b2 = r2.position.y + r2.size.y * 0.5;
+                            if(a1 < b2 && b1 < a2 && x2 > x1) {
+                                x1 = x2;
+                                r1.velocity.x = 0;
+                                r1.velocity.y *= 0.9;
+                            }
+                        }
+                    }
+                    r1.position.x = x1 + r1.size.x * 0.5;
+
+                } else if(r1.velocity.x > 1) {
+                    var x1 = r1.position.x + r1.size.x * 0.5 + dx;
+                    var a1 = r1.position.y - r1.size.y * 0.5;
+                    var a2 = r1.position.y + r1.size.y * 0.5;
+                    for(var i = 0; i < rectangles.length; i++) if(i != index) {
+                        var r2 = rectangles[i];
+                        var x2 = r2.position.x - r2.size.x * 0.5;
+                        if(r1.position.x < x2) {
+                            var b1 = r2.position.y - r2.size.y * 0.5;
+                            var b2 = r2.position.y + r2.size.y * 0.5;
+                            if(a1 < b2 && b1 < a2 && x2 < x1) {
+                                x1 = x2;
+                                r1.velocity.x = 0;
+                                r1.velocity.y *= 0.9;
+                            }
+                        }
+                    }
+                    r1.position.x = x1 - r1.size.x * 0.5;
+                }
+
+                if(r1.velocity.y < -1) {
+                    var y1 = r1.position.y - r1.size.y * 0.5 + dy;
+                    var a1 = r1.position.x - r1.size.x * 0.5;
+                    var a2 = r1.position.x + r1.size.x * 0.5;
+                    for(var i = 0; i < rectangles.length; i++) if(i != index) {
+                        var r2 = rectangles[i];
+                        var y2 = r2.position.y + r2.size.y * 0.5;
+                        if(r1.position.y > y2) {
+                            var b1 = r2.position.x - r2.size.x * 0.5;
+                            var b2 = r2.position.x + r2.size.x * 0.5;
+                            if(a1 < b2 && b1 < a2 && y2 > y1) {
+                                y1 = y2;
+                                r1.velocity.y = 0;
+                                r1.velocity.x *= 0.9;
+                            }
+                        }
+                    }
+                    r1.position.y = y1 + r1.size.y * 0.5;
+
+                } else if(r1.velocity.y > 1) {
+                    var y1 = r1.position.y + r1.size.y * 0.5 + dy;
+                    var a1 = r1.position.x - r1.size.x * 0.5;
+                    var a2 = r1.position.x + r1.size.x * 0.5;
+                    for(var i = 0; i < rectangles.length; i++) if(i != index) {
+                        var r2 = rectangles[i];
+                        var y2 = r2.position.y - r2.size.y * 0.5;
+                        if(r1.position.y < y2) {
+                            var b1 = r2.position.x - r2.size.x * 0.5;
+                            var b2 = r2.position.x + r2.size.x * 0.5;
+                            if(a1 < b2 && b1 < a2 && y2 < y1) {
+                                y1 = y2;
+                                r1.velocity.y = 0;
+                                r1.velocity.x *= 0.9;
+                            }
+                        }
+                    }
+                    r1.position.y = y1 - r1.size.y * 0.5;
+                }
+
+            }
+            function update(delta) {
+                for(var i = 0; i < rectangles.length; i++) {
+                    var r = rectangles[i];
+                    r.velocity.x -= r.gravity.x * delta;
+                    r.velocity.y += r.gravity.y * delta;
+                    move(i, r.velocity.x * delta, r.velocity.y * delta, delta);
+                }
+            }
+            function loop(last) {
+                requestAnimationFrame(function() {
+                    var now = performance.now();
+                    var delta = (now - last) * 0.001;
+                    if(delta < 2) {
+                        update(delta);
+                        draw();
+                    }
+                    loop(now);
+                });
+            }
+            loop(performance.now());
+        </script>
+    </body>
+</html>
