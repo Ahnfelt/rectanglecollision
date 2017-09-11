@@ -44,13 +44,14 @@
                 }
                 
                 if(r1.velocity.x < -1) {
-                    var x1 = r1.position.x - r1.size.x * 0.5 + dx;
+                    var x0 = r1.position.x - r1.size.x * 0.5;
+                    var x1 = x0 + dx;
                     var a1 = r1.position.y - r1.size.y * 0.5;
                     var a2 = r1.position.y + r1.size.y * 0.5;
                     for(var i = 0; i < rectangles.length; i++) if(i != index) {
                         var r2 = rectangles[i];
                         var x2 = r2.position.x + r2.size.x * 0.5;
-                        if(r1.position.x > x2) {
+                        if(r1.position.x > x2 && x2 <= x0) {
                             var b1 = r2.position.y - r2.size.y * 0.5;
                             var b2 = r2.position.y + r2.size.y * 0.5;
                             if(a1 < b2 && b1 < a2 && x2 > x1) {
@@ -63,13 +64,14 @@
                     r1.position.x = x1 + r1.size.x * 0.5;
 
                 } else if(r1.velocity.x > 1) {
-                    var x1 = r1.position.x + r1.size.x * 0.5 + dx;
+                    var x0 = r1.position.x + r1.size.x * 0.5;
+                    var x1 = x0 + dx;
                     var a1 = r1.position.y - r1.size.y * 0.5;
                     var a2 = r1.position.y + r1.size.y * 0.5;
                     for(var i = 0; i < rectangles.length; i++) if(i != index) {
                         var r2 = rectangles[i];
                         var x2 = r2.position.x - r2.size.x * 0.5;
-                        if(r1.position.x < x2) {
+                        if(r1.position.x < x2 && x2 >= x0) {
                             var b1 = r2.position.y - r2.size.y * 0.5;
                             var b2 = r2.position.y + r2.size.y * 0.5;
                             if(a1 < b2 && b1 < a2 && x2 < x1) {
@@ -83,13 +85,14 @@
                 }
 
                 if(r1.velocity.y < -1) {
-                    var y1 = r1.position.y - r1.size.y * 0.5 + dy;
+                    var y0 = r1.position.y - r1.size.y * 0.5; 
+                    var y1 = y0 + dy;
                     var a1 = r1.position.x - r1.size.x * 0.5;
                     var a2 = r1.position.x + r1.size.x * 0.5;
                     for(var i = 0; i < rectangles.length; i++) if(i != index) {
                         var r2 = rectangles[i];
                         var y2 = r2.position.y + r2.size.y * 0.5;
-                        if(r1.position.y > y2) {
+                        if(r1.position.y > y2 && y2 <= y0) {
                             var b1 = r2.position.x - r2.size.x * 0.5;
                             var b2 = r2.position.x + r2.size.x * 0.5;
                             if(a1 < b2 && b1 < a2 && y2 > y1) {
@@ -102,13 +105,14 @@
                     r1.position.y = y1 + r1.size.y * 0.5;
 
                 } else if(r1.velocity.y > 1) {
-                    var y1 = r1.position.y + r1.size.y * 0.5 + dy;
+                    var y0 = r1.position.y + r1.size.y * 0.5;
+                    var y1 = y0 + dy;
                     var a1 = r1.position.x - r1.size.x * 0.5;
                     var a2 = r1.position.x + r1.size.x * 0.5;
                     for(var i = 0; i < rectangles.length; i++) if(i != index) {
                         var r2 = rectangles[i];
                         var y2 = r2.position.y - r2.size.y * 0.5;
-                        if(r1.position.y < y2) {
+                        if(r1.position.y < y2 && y2 >= y0) {
                             var b1 = r2.position.x - r2.size.x * 0.5;
                             var b2 = r2.position.x + r2.size.x * 0.5;
                             if(a1 < b2 && b1 < a2 && y2 < y1) {
