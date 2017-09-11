@@ -54,14 +54,15 @@
                         if(x2 <= x0) {
                             var b1 = r2.position.y - r2.size.y * 0.5;
                             var b2 = r2.position.y + r2.size.y * 0.5;
-                            if(a1 < b2 && b1 < a2 && x2 >= x1) {
+                            if(a1 <= b2 && b1 <= a2 && x2 >= x1) {
                                 x1 = x2;
                                 r1.velocity.x = 0;
                                 r1.velocity.y *= 0.9;
                             }
                         }
                     }
-                    r1.position.x = x1 + r1.size.x * 0.5;
+                    var x3 = x1 + r1.size.x * 0.5 + 0.01;
+                    if(x3 < r1.position.x) r1.position.x = x3;
 
                 } else if(r1.velocity.x > 1) {
                     var x0 = r1.position.x + r1.size.x * 0.5;
@@ -74,14 +75,15 @@
                         if(x2 >= x0) {
                             var b1 = r2.position.y - r2.size.y * 0.5;
                             var b2 = r2.position.y + r2.size.y * 0.5;
-                            if(a1 < b2 && b1 < a2 && x2 <= x1) {
+                            if(a1 <= b2 && b1 <= a2 && x2 <= x1) {
                                 x1 = x2;
                                 r1.velocity.x = 0;
                                 r1.velocity.y *= 0.9;
                             }
                         }
                     }
-                    r1.position.x = x1 - r1.size.x * 0.5;
+                    var x3 = x1 - r1.size.x * 0.5 - 0.01;
+                    if(x3 > r1.position.x) r1.position.x = x3;
                 }
 
                 if(r1.velocity.y < -1) {
@@ -95,14 +97,15 @@
                         if(y2 <= y0) {
                             var b1 = r2.position.x - r2.size.x * 0.5;
                             var b2 = r2.position.x + r2.size.x * 0.5;
-                            if(a1 < b2 && b1 < a2 && y2 >= y1) {
+                            if(a1 <= b2 && b1 <= a2 && y2 >= y1) {
                                 y1 = y2;
                                 r1.velocity.y = 0;
                                 r1.velocity.x *= 0.9;
                             }
                         }
                     }
-                    r1.position.y = y1 + r1.size.y * 0.5;
+                    var y3 = y1 + r1.size.y * 0.5 + 0.01;
+                    if(y3 < r1.position.y) r1.position.y = y1 + r1.size.y * 0.5;
 
                 } else if(r1.velocity.y > 1) {
                     var y0 = r1.position.y + r1.size.y * 0.5;
@@ -115,14 +118,15 @@
                         if(y2 >= y0) {
                             var b1 = r2.position.x - r2.size.x * 0.5;
                             var b2 = r2.position.x + r2.size.x * 0.5;
-                            if(a1 < b2 && b1 < a2 && y2 <= y1) {
+                            if(a1 <= b2 && b1 <= a2 && y2 <= y1) {
                                 y1 = y2;
                                 r1.velocity.y = 0;
                                 r1.velocity.x *= 0.9;
                             }
                         }
                     }
-                    r1.position.y = y1 - r1.size.y * 0.5;
+                    var y3 = y1 - r1.size.y * 0.5 - 0.01;
+                    if(y3 > r1.position.y) r1.position.y = y3;
                 }
 
             }
