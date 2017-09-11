@@ -138,7 +138,7 @@
                 requestAnimationFrame(function() {
                     var now = performance.now();
                     var delta = (now - last) * 0.001;
-                    if(delta < 2) {
+                    if(delta < 1) {
                         update(delta);
                         draw();
                     }
