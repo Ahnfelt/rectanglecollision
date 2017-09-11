@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Collision attempt 99999999999999</title>
+    </head>
+    <body style="margin: 0; padding: 0">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <script>
+            var canvas = document.getElementById("canvas");
+            var tiles = {};
+            var size = 2;
+            var width = Math.floor(canvas.width / size);
+            var height = Math.floor(canvas.height / size);
+            var rooms = [];
+            function occupied(x1, y1, w, h) {
+                for(var x = x1; x < x1 + w; x++) {
+                    for(var y = y1; y < y1 + h; y++) {
+                        if(x < 0 || y < 0 || x >= width || y >= height) return true;
+                        if(tiles[x + "," + y] != null) return true;
+                    }
+                }
+                return false;
+            }
+            function placeRooms() {
+                for(var i = 0; i < 5000; i++) {
+                    var x1 = Math.floor(Math.random() * width * 0.5) * 2 + 1;
+                    var y1 = Math.floor(Math.random() * height * 0.5) * 2 + 1;
+                    var w = Math.floor(Math.pow(Math.random(), 2) * 20 + 5) * 2 + 1;
+                    var h = Math.floor(Math.pow(Math.random(), 2) * 20 + 5) * 2 + 1;
+                    if(!occupied(x1, y1, w, h)) {
+                        rooms.push({x: x1, y: y1, width: w, height: h});
+                        for(var x = x1; x < x1 + w; x++) {
+                            for(var y = y1; y < y1 + h; y++) {
+                                tiles[x + "," + y] = "#ffc0a0";
+                            }
+                        }
+                    }
+                }
+            }
+            function placeCorridors() {
+                for(var x = 0; x < width; x += 1) {
+                    for(var y = 0; y < height; y += 1) {
+                        if(tiles[x + "," + y] == null) {
+                            var c = true;
+                            for(var x2 = x - 1; x2 <= x + 1; x2++) {
+                                for(var y2 = y - 1; y2 <= y + 1; y2++) {
+                                    c = c && tiles[x2 + "," + y2] != "#ffc0a0";
+                                }
+                            }
+                            if(c) {
+                                tiles[x + "," + y] = "#c0d0a0";
+                            }
+                        }
+                    }
+                }
+            }
+            function joinRooms() {
+                for(var x = 0; x < width; x += 1) {
+                    for(var y = 0; y < height; y += 1) {
+                        if(tiles[x + "," + y] == null) {
+                            var l = tiles[(x - 1) + "," + y] == "#ffc0a0";
+                            var r = tiles[(x + 1) + "," + y] == "#ffc0a0";
+                            var u = tiles[x + "," + (y - 1)] == "#ffc0a0";
+                            var d = tiles[x + "," + (y + 1)] == "#ffc0a0";
+                            if((l && r) || (u && d)) {
+                                tiles[x + "," + y] = "#ffc0a0";
+                            }
+                        }
+                    }
+                }
+            }
+            function placeDoor(x, y) {
+                if(tiles[x + "," + y] == null) {
+                    tiles[x + "," + y] = "#8090a0";
+                }
+            }
+            function placeDoors() {
+                for(var i = 0; i < rooms.length; i++) {
+                    var room = rooms[i];
+                    var o = Math.random();
+                    if(o < 0.25) placeDoor(room.x - 1, Math.floor(room.y + Math.random() * room.height));
+                    else if(o < 0.50) placeDoor(room.x + room.width, Math.floor(room.y + Math.random() * room.height));
+                    else if(o < 0.75) placeDoor(Math.floor(room.x + Math.random() * room.width), room.y - 1);
+                    else placeDoor(Math.floor(room.x + Math.random() * room.width), room.y + room.height);
+                }
+            }
+            function draw() {
+                var g = canvas.getContext("2d");
+                g.clearRect(0, 0, canvas.width, canvas.height);
+                for(var x = 0; x < width; x++) {
+                    for(var y = 0; y < height; y++) {
+                        var c = tiles[x + "," + y];
+                        if(c != null) {
+                            g.beginPath();
+                            g.rect(x * size, y * size, size, size);
+                            g.fillStyle = c;
+                            g.fill();
+                            g.closePath();
+                        }
+                    }
+                }
+            }
+            placeRooms();
+            joinRooms();
+            placeCorridors();
+            placeDoors();
+            draw();
+        </script>
+    </body>
+</html>
