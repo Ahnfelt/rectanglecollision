@@ -129,7 +129,7 @@
             function update(delta) {
                 for(var i = 0; i < rectangles.length; i++) {
                     var r = rectangles[i];
-                    r.velocity.x -= r.gravity.x * delta;
+                    r.velocity.x += r.gravity.x * delta;
                     r.velocity.y += r.gravity.y * delta;
                     move(i, r.velocity.x * delta, r.velocity.y * delta, delta);
                 }
